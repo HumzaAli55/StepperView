@@ -22,9 +22,44 @@ There is "Continue", "Back" and "Finish" option available to control the flow of
 
 You can add this package anywhere just like any other widget.
 
-    @override
-    Widget build(BuildContext context) {
-      return StepperView(data: stepsData,numberOfSteps: 3,);
+    class HomePage extends StatefulWidget {
+      const HomePage({Key? key}) : super(key: key);
+
+      @override
+      _HomePageState createState() => _HomePageState();
+    }
+
+    class _HomePageState extends State<HomePage> {
+      List<StepData> stepsData = [];
+
+      @override
+      Widget build(BuildContext context) {
+        return StepperView(data: stepsData,numberOfSteps: 3,);
+      }
+
+      @override
+      void initState() {
+        _getData();
+        super.initState();
+      }
+
+      static const MethodChannel platform = MethodChannel('ads/campaign');
+
+      Future<void> _getData() async {
+
+        try {
+          final result = await platform.invokeMethod('getCampaignData');
+          var jsonData = jsonDecode(result);
+          DataModel model = DataModel.fromJson(jsonData);
+          setState(() {
+            stepsData = model.data!;
+          });
+        } on PlatformException catch (e) {
+          print('${e.message}');
+        }
+      }
+
+
     }
 
 
