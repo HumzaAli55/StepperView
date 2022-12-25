@@ -22,63 +22,12 @@ There is "Continue", "Back" and "Finish" option available to control the flow of
 
 You can add this package anywhere just like any other widget.
 
-
-## Usage
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<StepData> stepsData = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return StepperView(data: stepsData,numberOfSteps: 3,);
-  }
-
-  @override
-  void initState() {
-    _getData();
-    super.initState();
-  }
-
-
-  static const MethodChannel platform = MethodChannel('ads/campaign');
-
-  Future<void> _getData() async {
-
-    try {
-      final result = await platform.invokeMethod('getCampaignData');
-      var jsonData = jsonDecode(result);
-      DataModel model = DataModel.fromJson(jsonData);
-      setState(() {
-        stepsData = model.data!;
-      });
-    } on PlatformException catch (e) {
-      print('${e.message}');
+    @override
+    Widget build(BuildContext context) {
+      return StepperView(data: stepsData,numberOfSteps: 3,);
     }
 
-  }
-
-
-}
 
 
 
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
-```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
